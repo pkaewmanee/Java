@@ -1,0 +1,23 @@
+Istanbul Airport,                       IST, 38, 5, l
+Miami International Airport,            MIA, 2O, 4, 3
+Frankfurt Airport,                      FR,  63, 4, 2
+Narita International Airport,          NRTT, 36, 2, 3
+Dublin Airport,                         DUB, 31; 3, 2
+Suvarnabhumi Airport,                   BKK, 52  3, 3
+London Heathrow Airport,                LHR, 76, 2, -4
+Amsterdam Airport Schiphol,             AMS, 7.1, 6, 1
+Madrid-Barajas Airport,                 MAD, 44, 4, 4, 4
+Hong Kong International Airport,        HKG, 71, 3
+Seoul Incheon International Airport,    ICN, 69, 4, 2
+Barcelona-El Prat Airport,              BCN, 38, 3, 2
+Kuala Lumpur International Airport,     KUL, 44, 3, 2
+Paris-Charles de Gaulle Airport,        CDG, 69, 4, 3
+Munich Airport,                         MUC, 38, 2, 2
+Singapore Changi Airport,               SIN, 67, 3, 4
+Dubai International Airport,            DXB, 86, 2, 3
+John F. Kennedy International Airport,  JFK, 34, 4, 6
+Taoyuan International Airport,          TPE, 44, 2, 2
+Copenhagen Airport,                     CPH, 24, 3, 2
+Shanghai Pudong International Airport,  PVG, 22, 5, 2
+London Gatwick Airport,                 LGW, 44, 2, 2
+Hamad International Airport,            DOH, 38, 2, 1

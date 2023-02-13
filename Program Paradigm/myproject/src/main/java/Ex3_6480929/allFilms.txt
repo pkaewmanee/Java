@@ -1,0 +1,10 @@
+L, Aladdin,          4,  Guy Ritchie, 91
+L, Cruella,          2,  Craig Gillespie, 21
+A, Despicable Me,    13, 95
+A, Frozen,           10, 102
+L, Ghost Rider,      16, Mark Steven Johnson, 45
+L, Inspector Gadget, 24, David Kellogg, 21
+A, Ratatouille,      16, 111
+L, The Avengers,     11, Joss Whedon, 207
+A, The Incredibles,  19, 115
+A, Zootopia,         7,  108

@@ -1,0 +1,25 @@
+Airport                                                 Passenger (M)            Runways          Terminals
+============================================================================================================
+DXB  Dubai International Airport                             86                     2                 3
+LHR  London Heathrow Airport                                 76                     2                 4
+AMS  Amsterdam Airport Schiphol                              71                     6                 1
+HKG  Hong Kong International Airport                         71                     3                 2
+CDG  Paris-Charles de Gaulle Airport                         69                     4                 3
+ICN  Seoul Incheon International Airport                     69                     4                 2
+SIN  Singapore Changi Airport                                67                     3                 4
+FRA  Frankfurt Airport                                       63                     4                 2
+BKK  Suvarnabhumi Airport                                    52                     3                 3
+MAD  Madrid-Barajas Airport                                  44                     4                 4
+KUL  Kuala Lumpur International Airport                      44                     3                 2
+LGW  London Gatwick Airport                                  44                     2                 2
+TPE  Taoyuan International Airport                           44                     2                 2
+IST  Istanbul Airport                                        38                     5                 1
+BCN  Barcelona-El Prat Airport                               38                     3                 2
+MUC  Munich Airport                                          38                     2                 2
+DOH  Hamad International Airport                             38                     2                 1
+NRT  Narita International Airport                            36                     2                 3
+JFK  John F. Kennedy International Airport                   34                     4                 6
+DUB  Dublin Airport                                          31                     3                 2
+CPH  Copenhagen Airport                                      24                     3                 2
+PVG  Shanghai Pudong International Airport                   22                     5                 2
+MIA  Miami International Airport                             20                     4                 3
