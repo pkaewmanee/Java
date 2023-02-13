@@ -124,7 +124,6 @@ public class Ex5_6480929 {
                 Scanner sc_err = new Scanner(System.in);
                 String new_path = sc_err.nextLine();
                 path = "src/main/java/Ex5_6480929/" + new_path + "/";
-                Korn a bitch
             }
         }
     }
