@@ -48,7 +48,8 @@ class Airport implements Comparable<Airport> {
 
     // Print an airport's information in a formatted way
     public void print() {
-        System.out.printf("%-50s %12d %12d %12d\n", airport_code + " " + airport_name, passenger, runways, terminals);
+        System.out.printf("%-50s %12d %12d %12d\n", airport_code + " " + airport_name, 
+                passenger, runways, terminals);
     }
 }
 
@@ -117,3 +118,8 @@ public class Ex5_6480929 {
         }
     }
 }
+
+
+
+
+

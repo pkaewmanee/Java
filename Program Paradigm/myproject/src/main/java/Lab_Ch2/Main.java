@@ -6,39 +6,62 @@ package Lab_Ch2;
 
 
 
-import java.io.*;
+// Define an interface called MyInterface
+interface MyInterface {
+    // Declare a method with no implementation
+    void myMethod();
+}
 
-public class TryCatchFinallyExample {
+// Define an abstract class called MyAbstractClass
+abstract class MyAbstractClass {
+    // Declare a field
+    private int myField;
 
-    public static void main(String[] args) {
-        // We declare the FileWriter outside the try block so we can reference it in the finally block.
-        FileWriter writer = null;
-        
-        try {
-            // Create a FileWriter object to write to a file named "output.txt".
-            writer = new FileWriter("output.txt");
-            
-            // Write some text to the file.
-            writer.write("Hello, world!");
-        } catch (IOException e) {
-            // If an IOException is thrown, catch it and print an error message.
-            System.err.println("An IOException occurred: " + e.getMessage());
-        } finally {
-            // The finally block is always executed, whether or not an exception was thrown.
-            // This is where we should clean up any resources we have used, such as closing a file or a network connection.
-            
-            try {
-                // We need to check if the writer is null before we try to close it, in case an exception was thrown while creating the writer.
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                // If an IOException is thrown while closing the writer, catch it and print an error message.
-                System.err.println("An IOException occurred while closing the writer: " + e.getMessage());
-            }
-        }
+    // Define a constructor that takes an int parameter
+    public MyAbstractClass(int myField) {
+        // Set the value of the field to the parameter
+        this.myField = myField;
+    }
+
+    // Define a method with an implementation
+    public void myMethod() {
+        // Output the value of the field
+        System.out.println("My field is: " + myField);
+    }
+
+    // Define an abstract method with no implementation
+    abstract public void myAbstractMethod();
+}
+
+// Define a class called MyClass that implements MyInterface and extends MyAbstractClass
+class MyClass extends MyAbstractClass implements MyInterface {
+    // Define a constructor that takes an int parameter
+    public MyClass(int myField) {
+        // Call the constructor of the superclass
+        super(myField);
+    }
+
+    // Implement the myAbstractMethod method
+    public void myAbstractMethod() {
+        // Output a message
+        System.out.println("Implementing myAbstractMethod");
     }
 }
+
+// Define a main method
+public class Main {
+    public static void main(String[] args) {
+        // Create an instance of MyClass with myField set to 42
+        MyClass myObject = new MyClass(42);
+
+        // Call the myMethod method
+        myObject.myMethod();
+
+        // Call the myAbstractMethod method
+        myObject.myAbstractMethod();
+    }
+}
+
 
 
 

@@ -4,7 +4,6 @@
  */
 package Ex4_6480929;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import java.util.Scanner;
 
 // Create a class called Airport that implements the Comparable interface.
 class Airport implements Comparable<Airport> {
+
     // Define instance variables for the airport's name, code, number of passengers, runways, and terminals.
     private String name, code;
     private int passenger, runways, terminals;
@@ -45,6 +45,7 @@ class Airport implements Comparable<Airport> {
 
 // Define the main class.
 public class Ex4_6480929 {
+
     public static void main(String[] args) throws FileNotFoundException {
         // Define the path to the airports.txt file.
         String path = "src/main/java/Ex4_6480929/airports.txt/";
@@ -66,7 +67,8 @@ public class Ex4_6480929 {
 
         // Print the headers for the table of airport information.
         System.out.printf("%-50s %18s %18s %18s\n", "Airport", "Passenger (M)", "Runways", "Terminals");
-        System.out.println("============================================================================================================");
+        System.out.println("==================================================================================================="
+                + "=========");
 
         // Print the information for each airport in the ArrayList.
         for (Airport airport : airportList) {
@@ -74,4 +76,3 @@ public class Ex4_6480929 {
         }
     }
 }
-
