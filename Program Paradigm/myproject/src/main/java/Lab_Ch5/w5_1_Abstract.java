@@ -40,6 +40,16 @@ class Dog1 extends AnimalAbstract1
     //public void fly(String from, String to)             { }
     //@Override
     //public void swim(String from, String to)            { }
+
+    @Override
+    public void fly(String from, String to) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void swim(String from, String to) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,10 +76,20 @@ class Bird1 extends AnimalAbstract1
     //public void eat(AnimalAbstract1 food)               { }
     //@Override
     //public void swim(String from, String to)            { }
+
+    @Override
+    public void eat(AnimalAbstract1 food) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void swim(String from, String to) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-class w5_1_Abstract
+public class w5_1_Abstract
 {
     public static void main(String[] args) 
     {
