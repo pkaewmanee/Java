@@ -1,42 +1,55 @@
 /*
 Possathorn Sujipisut 6480274
 Phakkhapon Kaewmanee 6480929
+Supakorn Unjindamanee 6480279
+Jawit Poopradit      6480087
  */
 package Project_6480929;
 
 import java.io.*;
 import java.util.*;
 
-/**
- *
- * @author korn
- */
 public class Project {
 
     public static void main(String args[]) {
 
         Product P[] = new Product[5];
         String path = "src/main/java/Project_6480929/";
-        FileHandler FH = new FileHandler(path, "products.txt");
+        String productInFile = "products.txt";
+        //String orderInFile = "orders_errors.txt";
+         String orderInFile = "orders.txt";
+        String shippingInFile = "shipping.txt";
+
+        FileHandler FH = new FileHandler(path, productInFile);
         FH.wrongProductFile_loop(P);
+
+        ArrayList<ShippingCalculator> shipping = new ArrayList<>();
+        FileHandler SHF = new FileHandler(path, shippingInFile);
+        SHF.wrongShippingFile_loop(shipping);
 
         //GET RID ONCE HAVE SHIPPING
         //Handling Orders Errors
-        ArrayList<Order> orders = new ArrayList<Order>();
-        FileHandler OFH = new FileHandler(path, "orders.txt");
+        ArrayList<Order> orders = new ArrayList<>();
+        FileHandler OFH = new FileHandler(path, orderInFile);
 
         //Adding each new customer
-        ArrayList<Customer> c = new ArrayList<Customer>();
+        ArrayList<Customer> c = new ArrayList<>();
         OFH.wrongOrderFile_loop(orders, c);
-
-        ArrayList<ShippingCalculator> shipping = new ArrayList<ShippingCalculator>();
-        FileHandler SHF = new FileHandler(path, "shipping.txt");
-        SHF.wrongShippingFile_loop(shipping);
 
         //Order processing and printing
         System.out.printf("\n==== Order Processing ====");
         for (Order o : orders) {
             o.orderProcessing(P, c, shipping);
+        }
+        /*System.out.println("===== Product Summary =====");
+        for(int t = 0 ; t<5 ; t++){
+            System.out.printf("Total item %d: ", t+1); System.out.println(P[t].returnUnits());
+        }*/
+        Arrays.sort(P, (p1, p2) -> p2.calculateTotalSales(p2.returnUnits()) - p1.calculateTotalSales(p1.returnUnits()));
+        System.out.println("===== Product Summary =====");
+        for (int t = 0; t < 5; t++) {
+            Product currentProduct = P[t];
+            System.out.printf("%17s  %15s %,7d, %2d units\n", currentProduct.returnName(), "Total sales:", currentProduct.calculateTotalSales(currentProduct.returnUnits()), currentProduct.returnUnits());
         }
 
     }
@@ -71,6 +84,16 @@ class Product {
         int totalSales = units * productPrice;
         return totalSales;
     }
+
+    public int calculateTotalUnits(int units) {
+        totalUnits += units;
+        return totalUnits;
+    }
+
+    public int returnUnits() {
+        return totalUnits;
+    }
+
 }
 
 class Customer {
@@ -87,8 +110,8 @@ class Customer {
         return name;
     }
 
-    public int cashBackRedemtion(int totalBills) {
-        int MaxCashBacks = Math.min(cashBacks, 100);
+    public int cashBackRedemption(int totalBills) {
+        int MaxCashBacks = Math.max(0, Math.min(cashBacks, 100));
         int redemption = Math.min(MaxCashBacks, totalBills);
         cashBacks -= redemption;
         return redemption;
@@ -96,8 +119,8 @@ class Customer {
 
     public void addCashBacks(int totalPrices) {
         double earnCashBack = Math.floor(totalPrices * 0.01);
-        cashBacks += earnCashBack;
         int cashBacksInt = (int) cashBacks;  //get rid of demimal
+        cashBacks += earnCashBack;
     }
 
     public void print() {
@@ -163,44 +186,68 @@ class Order {
         }
     }
 
+    public int getItem1() {
+        return item1;
+    }
+
     public void orderProcessing(Product p[], ArrayList<Customer> c, ArrayList<ShippingCalculator> shippingcal) {
         totalPrice = 0;
         totalWeight = 0;
 
+        int[] itemQuantities = {item1, item2, item3, item4, item5};
+
+        // Calculate total quantity of each item
+        for (int i = 0; i < p.length; i++) {
+            p[i].calculateTotalUnits(itemQuantities[i]);
+        }
+
         //Calcualte total price and weight
-        totalPrice = p[0].returnPrice() * item1;
-        totalWeight = p[0].returnWeight() * item1;
-
-        totalPrice = totalPrice + (p[1].returnPrice() * item2);
-        totalWeight = totalWeight + (p[1].returnWeight() * item2);
-
-        totalPrice = totalPrice + (p[2].returnPrice() * item3);
-        totalWeight = totalWeight + (p[2].returnWeight() * item3);
-
-        totalPrice = totalPrice + (p[3].returnPrice() * item4);
-        totalWeight = totalWeight + (p[3].returnWeight() * item4);
-
-        totalPrice = totalPrice + (p[4].returnPrice() * item5);
-        totalWeight = totalWeight + (p[4].returnWeight() * item5);
+        for (int i = 0; i < p.length; i++) {
+            int item = 0;
+            switch (i) {
+                case 0:
+                    item = item1;
+                    break;
+                case 1:
+                    item = item2;
+                    break;
+                case 2:
+                    item = item3;
+                    break;
+                case 3:
+                    item = item4;
+                    break;
+                case 4:
+                    item = item5;
+                    break;
+            }
+            totalPrice += p[i].returnPrice() * item;
+            totalWeight += p[i].returnWeight() * item;
+        }
 
         //Cashback System
-        boolean costomerFind = false;
-        Customer find = c.get(0);
-        for (int i = 0; i < c.size(); i++) {
-            if (costomerFind == false) {
-                find = c.get(i);
-            }
-            if (orderName.equals(find.returnName())) {
-                costomerFind = true;
+        Customer customer = null;
+        for (Customer cust : c) {
+            if (cust.returnName().equals(orderName)) {
+                customer = cust;
+                break;
             }
         }
-        int cashback = find.cashBackRedemtion(totalPrice);
-        find.addCashBacks(totalPrice);
-        int futureCashback = find.cashBackRedemtion(totalPrice);
-        totalPrice = totalPrice - cashback;
+        if (customer == null) {
+            customer = new Customer(orderName);
+            c.add(customer);
+        }
+
+        int currentCashback = customer.returnCashback();
+        int redeemedCashback = customer.cashBackRedemption(totalPrice);
+        int discountedPrice = totalPrice - redeemedCashback;
+        customer.addCashBacks(totalPrice);
+        int futureCashback = customer.returnCashback();
 
         //CHANGE FOR SHIPPING
-        //CHANGE FOR SHIPPING
+        int shippingId;
+        String shippingType;
+        int shippingPrice = 0;
         if (shipping.equalsIgnoreCase("S")) {
             shippingId = 0;
             shippingType = "(standard)";
@@ -209,38 +256,17 @@ class Order {
             shippingType = "(express)";
         }
 
-        shippingPrice = ShippingCalculator.Calculate(shippingId, shippingType, totalWeight, shipping, shippingPrice, shippingcal);
+        int shippingFee = ShippingCalculator.Calculate(shippingId, shippingType, totalWeight, shipping, shippingPrice, shippingcal);
+        int finalBill = discountedPrice + shippingFee;
 
-        finalBill = totalPrice + shippingPrice;
-
-        //Printing Everything
-        //Order number, shipping type, orderer
-        System.out.printf("\nOrder %2d%11s,%6s >> ",
-                orderNumber, shippingType, orderName);
-
-        //Item types and quainty
-        System.out.printf("%17s(%2d)%17s(%2d)%17s(%2d)%17s(%2d)%17s(%2d)",
-                p[0].returnName(), item1, p[1].returnName(), item2,
+        System.out.printf("\nOrder %2d%11s,%6s >> ", orderNumber, shippingType, orderName);
+        System.out.printf("%17s(%2d)%17s(%2d)%17s(%2d)%17s(%2d)%17s(%2d)", p[0].returnName(), item1, p[1].returnName(), item2,
                 p[2].returnName(), item3, p[3].returnName(), item4,
                 p[4].returnName(), item5);
-
-        //Cashback
-        System.out.printf("\n%40s%6s", ">> Available cashback = ",
-                String.format("%,d", cashback));
-
-        //Total price
-        System.out.printf("\n%40s%6s", ">> Total price = ",
-                String.format("%,d", totalPrice));
-
-        //Total weight
-        System.out.printf("\n%40s%6s%15s%s", ">> Total weight = ",
-                String.format("%,d", totalWeight), "Shipping Fee = ",
-                String.format("%,d", shippingPrice));
-
-        //Final Bill
-        System.out.printf("\n%40s%6s%20s%s\n", ">> Final bill = ",
-                String.format("%,d", finalBill), "Cashback for next order = ",
-                String.format("%,d", futureCashback));
+        System.out.printf("\n%40s%6s", ">> Available cashback = ", String.format("%,d", currentCashback));
+        System.out.printf("\n%40s%6s", ">> Total price = ", String.format("%,d", totalPrice));
+        System.out.printf("\n%40s%6s%25s%s", ">> Total weight = ", String.format("%,d", totalWeight), "Shipping Fee = ", String.format("%,d", shippingFee));
+        System.out.printf("\n%40s%6s%36s%s\n", ">> Final bill = ", String.format("%,d", finalBill), "Cashback for next order = ", String.format("%,d", futureCashback));
     }
 
     public int returntotalWeight() {
@@ -377,12 +403,12 @@ class ShippingCalculator implements Comparable<ShippingCalculator> {
             totalWeightCounter -= sc4.getSurplusThreshold();
             int deduct = totalWeightCounter / sc4.getWeight();
             shippingPrice += (totalWeightCounter / sc4.getWeight()) * sc4.getFee();
-            
+
             totalWeightCounter -= (deduct * sc4.getWeight());
             if (totalWeightCounter < sc4.getWeight() && totalWeightCounter != 0) {
                 shippingPrice += sc4.getFee();
             }
-            
+
         }
 
         return shippingPrice;
@@ -429,6 +455,20 @@ class ShippingCalculator implements Comparable<ShippingCalculator> {
 
 }
 
+class InvalidInputException extends RuntimeException {
+
+    public InvalidInputException(String errorMessage) {
+        super(errorMessage);
+    }
+}
+
+class MissingFormatException extends java.lang.ArrayIndexOutOfBoundsException {
+
+    public MissingFormatException(String errorMessage) {
+        super(errorMessage);
+    }
+}
+
 //Feel free to make duplicate method in this class for file handling and caught Exception
 //Every file handling method will be put in this class!!
 class FileHandler {
@@ -461,6 +501,7 @@ class FileHandler {
     public void wrongProductFile_loop(Product[] P) {
         boolean opensuccess = false;
         int i = 0;
+        System.out.println("Read products from file " + path + fileName + "\n");
         while (!opensuccess) {
             try (Scanner fileScan = new Scanner(new File(path + fileName))) {
                 opensuccess = true;
@@ -470,28 +511,71 @@ class FileHandler {
                 }
             } catch (FileNotFoundException e) {
                 System.out.println(e);
-                System.out.println("New file name = ");
+                System.out.println("\nEnter file name for products: ");
                 fileName = keyboardScan.next();
+                File inputFile = new File(path + fileName);
+                if (inputFile.exists()) {
+                    //fileName = inputFileName;
+                    System.out.println("Read products from file " + path + fileName);
+                }
                 System.out.print("\n");
             }
+
         }
     }
 
     public void orderFileProcessLine(ArrayList<Order> o, String line, ArrayList<Customer> c) {
+        boolean correctionMade = false;
         try {
             String[] buf = line.split(",");
 
             int orderNum = Integer.parseInt(buf[0].trim());
             String name = buf[1].trim();
             String shipping = buf[2].trim();
-            int order1 = Integer.parseInt(buf[3].trim());
-            int order2 = Integer.parseInt(buf[4].trim());
-            int order3 = Integer.parseInt(buf[5].trim());
-            int order4 = Integer.parseInt(buf[6].trim());
-            int order5 = Integer.parseInt(buf[7].trim());
 
-            Order addNew = new Order(orderNum, name, shipping, order1, order2,
-                    order3, order4, order5, c);
+            int[] order = new int[5];
+            int i, j = 0;
+
+            for (i = 0; i < 5; i++) {
+                try {
+                    if (buf.length < 8 && shipping.matches("\\d+")) {
+                        shipping = "S";
+                    }
+
+                    if (!"E".equalsIgnoreCase(shipping) && !"S".equalsIgnoreCase(shipping) && shipping.matches("\\d+")) {
+                        order[0] = Integer.parseInt(buf[2].trim());
+                        throw new InvalidInputException("For input: " + buf[2].trim());
+                    } else if (!"E".equalsIgnoreCase(shipping) && !"S".equalsIgnoreCase(shipping)) {
+                        shipping = "S";
+                        order[i] = Integer.parseInt(buf[i + 3].trim());
+                        throw new InvalidInputException("For input: " + buf[2].trim());
+                    } else {
+                        order[i] = Integer.parseInt(buf[i + 3 - j].trim());
+                    }
+
+                    if (order[i] < 0) {
+                        order[i] = 0;
+                        throw new InvalidInputException("For input: " + buf[i + 3].trim());
+                    }
+                    
+                } catch (NumberFormatException | InvalidInputException | MissingFormatException e) {
+                    correctionMade = true;
+                    System.out.println(e);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e = new MissingFormatException(" 1 columns missing");
+                    correctionMade = true;
+                    System.out.println(e);
+                    order[i] = 0;
+                }
+            }
+            if (correctionMade) {
+                System.out.print("Original [" + line + "] =========> ");
+                System.out.printf("Correction [%d, %s, %s, %d, %d, %d, %d, %d]\n\n", orderNum, name, shipping,
+                        order[0], order[1], order[2], order[3], order[4]);
+            }
+
+            Order addNew = new Order(orderNum, name, shipping, order[0], order[1],
+                    order[2], order[3], order[4], c);
             o.add(addNew);
 
         } catch (RuntimeException e) {
@@ -502,6 +586,7 @@ class FileHandler {
 
     public void wrongOrderFile_loop(ArrayList<Order> o, ArrayList<Customer> c) {
         boolean opensuccess = false;
+        System.out.println("Read orders from file " + path + fileName + "\n");
         while (!opensuccess) {
             try (Scanner fileScan = new Scanner(new File(path + fileName))) {
                 opensuccess = true;
@@ -510,8 +595,12 @@ class FileHandler {
                 }
             } catch (FileNotFoundException e) {
                 System.out.println(e);
-                System.out.println("New file name = ");
+                System.out.println("\nEnter file name for orders: ");
                 fileName = keyboardScan.next();
+                File inputFile = new File(path + fileName);
+                if (inputFile.exists()) {
+                    System.out.println("Read orders from file " + path + fileName);
+                }
                 System.out.print("\n");
             }
         }
@@ -539,6 +628,7 @@ class FileHandler {
 
     public void wrongShippingFile_loop(ArrayList<ShippingCalculator> sc) {
         boolean opensuccess = false;
+        System.out.println("Read shipping from file " + path + fileName + "\n");
         while (!opensuccess) {
             try (Scanner fileScan = new Scanner(new File(path + fileName))) {
                 opensuccess = true;
@@ -547,8 +637,12 @@ class FileHandler {
                 }
             } catch (FileNotFoundException e) {
                 System.out.println(e);
-                System.out.println("New file name = ");
+                System.out.println("\nEnter file name for shipping: ");
                 fileName = keyboardScan.next();
+                File inputFile = new File(path + fileName);
+                if (inputFile.exists()) {
+                    System.out.println("Read products from file " + path + fileName);
+                }
                 System.out.print("\n");
             }
         }
