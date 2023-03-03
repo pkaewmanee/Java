@@ -38,10 +38,10 @@ public class ShuffleSortThread extends Thread {
                 // Check if the list is sorted
                 sorted = true;
                 for (int i = 0; i < myNumbers.size() - 1; i++) {
-                    if (increasing && myNumbers.get(i) > myNumbers.get(i + 1)) {
+                    if (increasing && myNumbers.get(i) > myNumbers.get(i + 1)) { //increasing
                         sorted = false;
                         break;
-                    } else if (!increasing && myNumbers.get(i) < myNumbers.get(i + 1)) {
+                    } else if (!increasing && myNumbers.get(i) < myNumbers.get(i + 1)) { //descreasing
                         sorted = false;
                         break;
                     }
