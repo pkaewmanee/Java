@@ -1,34 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package Ex7;
-
-import java.util.Random;
-
 /**
- *
- * @author fill
+ * @author Phakkhapon Kaewmanee
  */
+package Ex7_6480929;
+
 public class Product {
 
     private int balance;
 
-    public int buy() {
-        Random rand = new Random();
-        int itemsToBuy = rand.nextInt(101);
-        itemsToBuy = Math.min(itemsToBuy, balance);
-        balance -= itemsToBuy;
-        return itemsToBuy;
+    public Product(int b) {
+        this.balance = b;
     }
 
-    public Product(int balance) {
-        this.balance = balance;
+    public int buy(int itemsToBuy, int customerId, int transactionId) {
+        int itemsBought = Math.min(itemsToBuy, balance);
+        balance -= itemsBought;
+        System.out.printf("Customer %d >> transaction = %d  buys       %3d items    balance = %3d\n", customerId, transactionId, itemsBought, balance);
+        return itemsBought;
     }
 
-    public void refund(int items) {
-// - Update product balance and report balance update by thread
+    public synchronized void refund(int items, int customerId) {
         balance += items;
+        System.out.printf("Customer %d >> ---------------  refunds    %3d items    balance = %3d\n", customerId, items, balance);
     }
 
     public int getBalance() {

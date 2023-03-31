@@ -1,46 +1,53 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ * @author Phakkhapon Kaewmanee
  */
-package Ex7;
+package Ex7_6480929;
 
+import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-/**
- *
- * @author fill
- */
-class CustomerThread extends Thread {
+public class CustomerThread extends Thread {
 
     private Product product;
-    private int transactions = 5;
     private CyclicBarrier refundBarrier;
+    private static int count = 1, orderAt = 1;
+    private int customerNumber;
+    private int transactionsLimit = 5, transactionNumber = 1;
 
-    public CustomerThread(Product product, CyclicBarrier refundBarrier) {
-        this.product = product;
-        this.refundBarrier = refundBarrier;
+    public CustomerThread(Product p, CyclicBarrier rb) {
+        this.product = p;
+        this.refundBarrier = rb;
+        this.customerNumber = count++;
     }
 
+    @Override
     public void run() {
-        try {
-            for (int i = 0; i < transactions; i++) {
-                int itemsToBuy = product.buy();
-                System.out.println("Customer " + getId() + " >> transaction = " + (i + 1) + " buys " + itemsToBuy + " items balance = " + product.getBalance());
-                refundBarrier.await();
-                System.out.println("Customer " + getId() + " >> ------------------ order at barrier = " + (refundBarrier.await() + 1));
-                if (refundBarrier.getNumberWaiting() == refundBarrier.getParties() - 1) {
-                    product.refund(itemsToBuy);
-                    System.out.println("Customer " + getId() + " >> ------------------ refunds " + itemsToBuy + " items balance " + product.getBalance());
-                    refundBarrier.await();
-                } else {
-                    refundBarrier.await();
+        for (int i = 0; i < transactionsLimit; i++) {
+            int rand = new Random().nextInt(101);
+            int buyItems = product.buy(rand, customerNumber, transactionNumber);
+            transactionNumber++;
+            try {
+                int order;
+                synchronized (CustomerThread.class) {
+                    order = orderAt++;
                 }
                 refundBarrier.await();
+                System.out.printf("Customer %d >> ---------------  order at barrier = %2d\n", customerNumber, order);
+                if (refundBarrier.getNumberWaiting() == 0) {
+                    product.refund(buyItems, customerNumber);
+                }
+                refundBarrier.await();
+                synchronized (CustomerThread.class) {
+                    orderAt = 1;
+                }
+            } catch (InterruptedException | BrokenBarrierException e) {
+                System.out.println(e);
             }
-        } catch (InterruptedException | BrokenBarrierException e) {
-            System.err.println("Exception caught: " + e.getMessage());
         }
     }
 
+    public static void resetCount() {
+        count = 1;
+    }
 }
