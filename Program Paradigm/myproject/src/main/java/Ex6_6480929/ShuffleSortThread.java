@@ -20,7 +20,7 @@ public class ShuffleSortThread extends Thread {
     public void run() {
         try {
             // 1. Print initial order and sorting direction to file
-            String loca = "/Users/fill/Desktop/Project_Hiroshima/Java/Program Paradigm/myproject/src/main/java/Ex6/";
+            String loca = "/Users/fill/Desktop/Project_Hiroshima/Java/Program Paradigm/myproject/src/main/java/Ex6_6480929/";
             out = new PrintWriter(loca + getName() + ".txt");
             out.println("Initial order: " + myNumbers);
             out.println("=== Shuffle to " + (increasing ? "increasing" : "decreasing") + " order ===");

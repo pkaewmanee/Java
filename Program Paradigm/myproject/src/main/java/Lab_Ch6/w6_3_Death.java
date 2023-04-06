@@ -19,7 +19,7 @@ class MyDeadThread extends Thread
         int i = 1;
         
         // ----- (1) prepare for unexpected death
-        /*
+        
 	try 
 	{            
             while (i <= 900)
@@ -30,14 +30,14 @@ class MyDeadThread extends Thread
             System.out.println("\n\n***** clean up task (ThreadDeath)");
             throw e;
 	}
-        */
+        
 
         
         // ----- (2) use program logic
-        /*
+        
         while (i <= 900 && !killed)
             {  System.out.printf("%4d ", i); i++; }
-        */
+        
         
         
         if (!killed)
@@ -57,10 +57,10 @@ class w6_3_Death
 	try { Thread.sleep(20); }  catch (InterruptedException e) { }
 
 	// ----- (1) stop thread (deprecated method)
-	//T1.stop();
+	T1.stop();
 
 	// ----- (2) stop thread without using explicit stop() --> safer
-        //T1.kill();
+        T1.kill();
 
         // ----- (3) busy waiting (not good)
         while (T1.isAlive()) { }

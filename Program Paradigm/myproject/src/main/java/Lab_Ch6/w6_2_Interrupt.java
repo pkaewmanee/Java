@@ -31,8 +31,8 @@ class MySleepingThread extends Thread
 
             // ----- (4) handle interrupt while running
             //           notice the difference between the following methods
-            //if ( interrupted() )	interrupt_Handle(true);
-            //if ( isInterrupted() )	interrupt_Handle(true);
+            if ( interrupted() )	interrupt_Handle(true);
+            if ( isInterrupted() )	interrupt_Handle(true);
 
             i++;
 	}
@@ -48,7 +48,7 @@ class w6_2_Interrupt
 	MySleepingThread T1 = new MySleepingThread("T1");
 
 	// ----- (3) interrupt the running thread 3 times
-	/*
+	
 	try 
 	{ 
             Thread.sleep(20);	T1.interrupt();
@@ -56,6 +56,6 @@ class w6_2_Interrupt
             Thread.sleep(20);	T1.interrupt();     
 	}	
 	catch (InterruptedException e) { }		
-        */
+        
     }
 }
